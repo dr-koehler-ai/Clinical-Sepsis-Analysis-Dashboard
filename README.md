@@ -166,6 +166,29 @@ A significance level of **α = 0.05** was used.
 
 Most clinical variables showed statistically significant differences between Sepsis and Non-Sepsis patients. Platelet counts were not significant using Welch's t-test but reached significance using the Mann–Whitney U test, suggesting differences in the underlying distributions rather than in the group means.
 
+### Continuous Variables
+
+| Feature | Test | Statistic | p-value | Interpretation |
+|---|---|---:|---:|---|
+| HR_mean | Welch t-test | 18.58 | <0.001 | Significant difference: septic patients showed higher mean heart rates |
+| MAP_mean | Welch t-test | -9.49 | <0.001 | Significant difference: septic patients showed lower mean arterial pressure |
+| Lactate_max | Welch t-test | 4.88 | <0.001 | Significant difference: septic patients had higher maximum lactate levels |
+| Creatinine_max | Welch t-test | 9.73 | <0.001 | Significant difference: septic patients had higher maximum creatinine levels |
+| Platelets_mean | Welch t-test | -1.70 | 0.088 | No statistically significant difference detected |
+| Age_first | Welch t-test | 1.42 | 0.157 | No statistically significant difference detected |
+
+---
+
+### Non-normally Distributed Variables
+
+| Feature | Test | Statistic | p-value | Interpretation |
+|---|---|---:|---:|---|
+| Lactate_max | Mann–Whitney U | 10,451,437.50 | <0.001 | Significant difference confirmed: septic patients showed higher lactate values |
+| Creatinine_max | Mann–Whitney U | 58,380,432.50 | <0.001 | Significant difference confirmed: septic patients showed higher creatinine values |
+| Platelets_mean | Mann–Whitney U | 44,743,645.00 | <0.001 | Significant difference detected despite Welch test result |
+
+---
+
 ---
 
 # Clinical Interpretation
