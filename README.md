@@ -391,6 +391,72 @@ and
 
 ---
 
+# Secondary Analysis: Lactate and Informative Missingness
+
+Lactate was investigated separately because of its high degree of missingness and its clinical relevance in the assessment of critically ill patients.
+
+## Lactate Availability
+
+Approximately **69% of patients had no recorded lactate measurement**.
+
+Importantly, lactate availability differed substantially by sepsis status:
+
+| Group | Lactate Not Measured | Lactate Measured |
+|---|---:|---:|
+| Non-Sepsis | 71.5% | 28.5% |
+| Sepsis | 38.0% | 62.0% |
+
+This outcome-dependent missingness suggested that lactate measurements were unlikely to be missing completely at random.
+
+To investigate whether the lactate value itself or the availability of a lactate measurement contributed additional discriminatory information, three logistic regression models were compared using the same train-test split and preprocessing strategy.
+
+## Model Comparison
+
+| Model | ROC-AUC | Average Precision | Sepsis Precision | Sepsis Recall | Sepsis F1 |
+|---|---:|---:|---:|---:|---:|
+| Primary model | 0.666 | 0.141 | 0.117 | 0.619 | 0.197 |
+| Primary + Lactate_max | 0.672 | 0.147 | 0.124 | 0.626 | 0.207 |
+| Primary + Lactate_max + Lactate_measured | **0.737** | **0.185** | **0.142** | **0.652** | **0.233** |
+
+Adding `Lactate_max` alone resulted in only a small improvement in model discrimination.
+
+In contrast, additionally including a binary indicator representing whether lactate had been measured (`Lactate_measured`) produced a substantially larger improvement across ROC-AUC, Average Precision, precision, recall, and F1-score.
+
+## Model Coefficients
+
+In the full secondary model, the standardized logistic regression coefficients included:
+
+| Feature | Standardized Coefficient |
+|---|---:|
+| Lactate_measured | **+0.549** |
+| HR_mean | +0.258 |
+| MAP_min | -0.202 |
+| Creatinine_max | +0.177 |
+| Resp_mean | +0.172 |
+| Platelets_min | -0.046 |
+| Age_first | +0.043 |
+| Lactate_max | +0.033 |
+
+`Lactate_measured` showed the largest standardized coefficient, whereas the coefficient for the actual maximum lactate value was comparatively small.
+
+## Interpretation
+
+These findings suggest that **lactate measurement availability contained substantially more discriminatory information than the lactate value itself** in this patient-level analysis.
+
+This is consistent with the concept of **informative missingness** in real-world clinical data.
+
+Clinical measurements are not necessarily obtained randomly. Lactate testing may be more likely in patients with greater disease severity, suspected hypoperfusion, or clinical concern for sepsis. Consequently, measurement availability may encode information about clinical decision-making and diagnostic workflow in addition to underlying patient physiology.
+
+The improved performance after adding `Lactate_measured` should therefore **not be interpreted as evidence that the lactate biomarker itself accounts for the observed improvement in discrimination**.
+
+Instead, this analysis demonstrates an important challenge in clinical machine learning:
+
+> **Missingness itself can become predictive when clinical measurement behavior is related to patient condition and clinician decision-making.**
+
+This distinction is particularly important when developing models intended for deployment across different hospitals or clinical workflows, where measurement practices may differ.
+
+
+
 # Limitations
 
 - Longitudinal ICU measurements were reduced to patient-level summary statistics.
